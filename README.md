@@ -1,70 +1,41 @@
-# Getting Started with Create React App
+- chia tách ra `searchInput`: user type xong vào ô input và `setSearchCity(searchInput)`: khi user nhấn `Enter` thì nó mới update giá trị `searchCity` và dùng giá trị `searchCity` để tìm data
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- Combo get data from API:
+  "useEffect(() => {
+  const fetchWeatherData = async () => { //Dùng async và gọi hàm thực hiện tại cuối
+  if (!searchCity) return; //Để tránh trường hợp MOUNT đầu tiên khi không có `searchCity`
+  setLoading(true);
+  //Process
+  try {
+  const url = `${api.base}weather?q=${searchCity}&units=metric&APPID=${api.key}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  if (res.ok) {
+  setWeatherInfo(
+  `${data.name}, ${data.sys.country}, ${data.weather[0].description}, ${data.main.temp}`
+  );
+  setErrorMessage(``);
+  } else {
+  setErrorMessage(data.message);
+  }
+  } catch (error) {
+  setErrorMessage(error.message);
+  }
+  setLoading(false);
+  };
+  fetchWeatherData();
+  }, [searchCity]);"
 
-## Available Scripts
+- Kiểm soát quá trình truyền data `BẮT ĐẦU từ lúc nào CHO ĐẾN KẾT THÚC lúc nào` thông qua state `loading`
 
-In the project directory, you can run:
+  - setLoading(true): bắt đầu load data, sẽ có vòng tròn loading hiển thị
+  - setLoading(false): kết thúc quá trình load data
 
-### `npm start`
+- Thêm style JSX: `style={{ color: "red" }`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+\*\*\*`res.ok` mới work
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Flow để control App với API và load data:
+  - Dùng `setLoading` để kiểm soát điểm đầu với điểm cuối của process, chờ đợi server
+  - Dùng `errorMessage` để hứng các lỗi
+  - Dùng `weatherInfo` để lấy data đầu ra của API
