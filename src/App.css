@@ -1,0 +1,162 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+.App {
+font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  color: #a5510d;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+header {
+  text-shadow: 3px 3px #f90;
+  font-size: 2.5rem;
+  font-weight: bold;
+
+}
+header p {
+  margin: 0px;
+}
+header hr {
+  border-bottom: 4px solid rgba(255, 41, 41, .555);
+  border-top: 4px solid rgba(255, 41, 41, .555);
+  border-radius: 3px;
+    height: 10px;
+    margin: 20px auto;
+    width: 50%;
+}
+
+
+
+main {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+main .boxLarge{
+  background-color: rgba(255,166,0,.4);
+ 
+    border: 5px solid #0baf94;
+    border-radius: 40px;
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 20px;
+    margin: 10px 0px;
+}
+img {
+  height: 60px;
+}
+main .boxLarge .boxmini{
+  border: 1px solid gray;
+  border-radius: 15px;
+}
+main .boxLarge .boxmini:hover{
+cursor: pointer;
+background-color: lightslategray;
+}
+main .boxLarge .selected {
+  background-color: lightblue;
+}
+
+/* Avatar */
+
+
+.rightSide .display{
+  position: sticky;
+  left: 0;
+  top: 15%;
+  background-color: #fff;
+    border: 15px solid #0baf94;
+    border-radius: 40px;
+    padding: 50px;
+
+    margin-top: 40px;
+
+}
+
+.rightSide .avatar{
+  height: 280px;
+  position: relative;
+  width: 260px}
+
+
+
+.rightSide .avatar img{
+  z-index: 0; 
+  position: absolute; 
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+}
+.rightSide #btnRandomize{
+  font-size: 1.5rem;
+  margin-top: 15px;
+  background-color: orange;
+  color: aqua;
+  border: 3px solid brown;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.rightSide #btnRandomize:hover{
+
+  background-color: #8b3710;
+ 
+}
+
+/* LEFT side  */
+.leftSide #bodyList p{
+  margin-top: 0 ;
+}
+
+@media only screen and (max-width: 768px) {
+
+  main {flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .rightSide {
+    position: static
+  }
+} 
