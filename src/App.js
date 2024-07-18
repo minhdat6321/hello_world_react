@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './App.css';
+import PartList from "./components/PartList.js";
+import AvatarCard from "./components/AvatarCard.js";
 
 const total = {
   body: 17,
@@ -16,7 +18,9 @@ const total = {
   neckwear: 18,
   facial_hair: 17
 };
-function getRandomInitialValue(total) { //min la: 1, max: total
+
+// function create a random number
+function getRandomValue(total) { //min la: 1, max: total
   const randomNumber = Math.floor(Math.random() * (total - 1)) + 1;
 
   return randomNumber;
@@ -25,31 +29,31 @@ function getRandomInitialValue(total) { //min la: 1, max: total
 
 
 
-
 function App() {
-
+  // Initial value for Part by random
   useEffect(() => {
     getRandom();
   }, [])
 
+  // FUNCTION RANDOM
   const getRandom = () => {
-    setBodyAvatar(getRandomInitialValue(total.body));
-    setEyesAvatar(getRandomInitialValue(total.eyes));
-    setHairAvatar(getRandomInitialValue(total.hair));
-    setMouthAvatar(getRandomInitialValue(total.mouth));
-    setEyebrowsAvatar(getRandomInitialValue(total.eyebrows));
-    setGlassesAvatar(getRandomInitialValue(total.glasses));
-    setClothingLayer1Avatar(getRandomInitialValue(total.clothingLayer1));
-    setClothingLayer2Avatar(getRandomInitialValue(total.clothingLayer2));
-    setClothingLayer3Avatar(getRandomInitialValue(total.clothingLayer3));
-    setEarringsAvatar(getRandomInitialValue(total.earrings));
-    setHatsAvatar(getRandomInitialValue(total.hats));
-    setNeckwearAvatar(getRandomInitialValue(total.neckwear));
-    setFacial_hairAvatar(getRandomInitialValue(total.facial_hair));
+    setBodyAvatar(getRandomValue(total.body));
+    setEyesAvatar(getRandomValue(total.eyes));
+    setHairAvatar(getRandomValue(total.hair));
+    setMouthAvatar(getRandomValue(total.mouth));
+    setEyebrowsAvatar(getRandomValue(total.eyebrows));
+    setGlassesAvatar(getRandomValue(total.glasses));
+    setClothingLayer1Avatar(getRandomValue(total.clothingLayer1));
+    setClothingLayer2Avatar(getRandomValue(total.clothingLayer2));
+    setClothingLayer3Avatar(getRandomValue(total.clothingLayer3));
+    setEarringsAvatar(getRandomValue(total.earrings));
+    setHatsAvatar(getRandomValue(total.hats));
+    setNeckwearAvatar(getRandomValue(total.neckwear));
+    setFacial_hairAvatar(getRandomValue(total.facial_hair));
   }
 
 
-
+  // useState Part
   const [bodyAvatar, setBodyAvatar] = useState(0);
   const [eyesAvatar, setEyesAvatar] = useState(0);
   const [hairAvatar, setHairAvatar] = useState(0);
@@ -66,61 +70,38 @@ function App() {
 
 
 
-  //Add className "selected" into boxmini
+  //FUNCTION Add className "selected" into boxmini
   const addSelected = (e, body) => {
-    const parentDiv = e.target.closest(`.${body}Part`);
-    document.querySelectorAll(`.${body}Part`).forEach(div => div.classList.remove('selected'));
-    parentDiv.classList.add('selected');
-    switch (body) {
-      case `body`:
-        setBodyAvatar(e.target.name)
-        break;
-      case `eyes`:
-        setEyesAvatar(e.target.name)
-        break;
-      case `hair`:
-        setHairAvatar(e.target.name)
-        break;
-      case `mouth`:
-        setMouthAvatar(e.target.name)
-        break;
-      case `eyebrows`:
-        setEyebrowsAvatar(e.target.name)
-        break;
-      case `glasses`:
-        setGlassesAvatar(e.target.name)
-        break;
-      case `clothingLayer1`:
-        setClothingLayer1Avatar(e.target.name)
-        break;
-      case `clothingLayer2`:
-        setClothingLayer2Avatar(e.target.name)
-        break;
-      case `clothingLayer3`:
-        setClothingLayer3Avatar(e.target.name)
-        break;
-      case `earrings`:
-        setEarringsAvatar(e.target.name)
-        break;
-      case `hats`:
-        setHatsAvatar(e.target.name)
-        break;
-      case `neckwear`:
-        setNeckwearAvatar(e.target.name)
-        break;
-      case `facial_hair`:
-        setFacial_hairAvatar(e.target.name)
-        break;
+    const avatarSet = {
+      body: setBodyAvatar,
+      eyes: setEyesAvatar,
+      hair: setHairAvatar,
+      mouth: setMouthAvatar,
+      eyebrows: setEyebrowsAvatar,
+      glasses: setGlassesAvatar,
+      clothingLayer1: setClothingLayer1Avatar,
+      clothingLayer2: setClothingLayer2Avatar,
+      clothingLayer3: setClothingLayer3Avatar,
+      earrings: setEarringsAvatar,
+      hats: setHatsAvatar,
+      neckwear: setNeckwearAvatar,
+      facial_hair: setFacial_hairAvatar,
+    };
 
-      default:
-        console.log(`setState Error`)
+    const setter = avatarSet[body];
+    if (setter) {
+      setter(Number(e.target.name));
+    } else {
+      console.error(`Invalid body part: ${body}`); // Handle invalid body part
     }
-  }
+  };
+
+  // FUNCTION Render Part
   const getCharacterPart = (total, body, path, bodyAvatar) => {
     let content = [];
     for (let i = 1; i < total + 1; i++) {
       content.push(
-        <div id={`${i}.${body}Part`} className={(bodyAvatar !== 0 && bodyAvatar === i) ? (`selected clickable boxmini ${body}Part`) : (`clickable boxmini ${body}Part`)}>
+        <div id={`${i}.${body}Part`} className={(bodyAvatar === i) ? (`selected clickable boxmini ${body}Part`) : (`clickable boxmini ${body}Part`)}>
           <img name={i} onClick={(e) => addSelected(e, body)} src={`${path}/${i}.png`} alt="" value={`${body}Avatar`} />
         </div>
       );
@@ -139,116 +120,40 @@ function App() {
       </header>
       <main>
         <div className="rightSide">
-
           <div className="display">
-
             <div className="avatar">
-              {/* ADD img cua cac loai phu kien  */}
-              <img style={{ zIndex: 1 }} src={`character/body/${bodyAvatar}.png`} alt="" />
-              <img style={{ zIndex: 2 }} src={`character/eyes/${eyesAvatar}.png`} alt="" />
-              <img style={{ zIndex: 3 }} src={`character/hair/${hairAvatar}.png`} alt="" />
-              <img style={{ zIndex: 4 }} src={`character/mouths/${mouthAvatar}.png`} alt="" />
-              <img style={{ zIndex: 5 }} src={`character/eyebrows/${eyebrowsAvatar}.png`} alt="" />
-              <img style={{ zIndex: 6 }} src={`character/accessories/glasses/${glassesAvatar}.png`} alt="" />
-              <img style={{ zIndex: 7 }} src={`character/clothes/layer_1/${clothingLayer1Avatar}.png`} alt="" />
-              <img style={{ zIndex: 8 }} src={`character/clothes/layer_2/${clothingLayer2Avatar}.png`} alt="" />
-              <img style={{ zIndex: 9 }} src={`character/clothes/layer_3/${clothingLayer3Avatar}.png`} alt="" />
-
-              <img style={{ zIndex: 3 }} src={`character/facial_hair/${facial_hairAvatar}.png`} alt="" />
-              <img style={{ zIndex: 100 }} src={`character/accessories/hats/${hatsAvatar}.png`} alt="" />
-              <img style={{ zIndex: 16 }} src={`character/accessories/neckwear/${neckwearAvatar}.png`} alt="" />
-              <img style={{ zIndex: 2 }} src={`character/accessories/earrings/${earringsAvatar}.png`} alt="" />
-
-              <img style={{ zIndex: 20 }} src={`character/noses/1.png`} alt="" />
+              <AvatarCard zIndex={1} path={`character/body`} updateState={bodyAvatar} />
+              <AvatarCard zIndex={2} path={`character/eyes`} updateState={eyesAvatar} />
+              <AvatarCard zIndex={3} path={`character/hair`} updateState={hairAvatar} />
+              <AvatarCard zIndex={4} path={`character/mouths`} updateState={mouthAvatar} />
+              <AvatarCard zIndex={5} path={`character/eyebrows`} updateState={eyebrowsAvatar} />
+              <AvatarCard zIndex={6} path={`character/accessories/glasses`} updateState={glassesAvatar} />
+              <AvatarCard zIndex={7} path={`character/clothes/layer_1`} updateState={clothingLayer1Avatar} />
+              <AvatarCard zIndex={8} path={`character/clothes/layer_2`} updateState={clothingLayer2Avatar} />
+              <AvatarCard zIndex={9} path={`character/clothes/layer_3`} updateState={clothingLayer3Avatar} />
+              <AvatarCard zIndex={2} path={`character/accessories/earrings`} updateState={earringsAvatar} />
+              <AvatarCard zIndex={100} path={`character/accessories/hats`} updateState={hatsAvatar} />
+              <AvatarCard zIndex={10} path={`character/accessories/neckwear`} updateState={neckwearAvatar} />
+              <AvatarCard zIndex={3} path={`character/facial_hair`} updateState={facial_hairAvatar} />
+              <AvatarCard zIndex={100} path={`character/noses`} updateState={1} />
             </div>
             <button onClick={() => getRandom()} id='btnRandomize'>RANDOMIZE</button>
           </div>
-
         </div>
         <div className="leftSide">
-
-
-          <div id="bodyList">
-            <p>Body</p>
-            <div className='boxLarge'>
-              {getCharacterPart(total.body, `body`, `./character/body`, bodyAvatar)}
-            </div>
-          </div>
-
-          <div id="eyesList">
-            <p>Eyes</p>
-            <div className='boxLarge'>
-              {getCharacterPart(total.eyes, `eyes`, `./character/eyes`, eyesAvatar)}
-            </div>
-          </div>
-          <div id="hairList">
-            <p>Hair</p>
-            <div className='boxLarge'>
-              {getCharacterPart(total.hair, `hair`, `./character/hair`, hairAvatar)}
-            </div>
-          </div>
-          <div id="mouthList">
-            <p>Mouth</p>
-            <div className='boxLarge'>
-              {getCharacterPart(total.mouth, `mouth`, `./character/mouths`, mouthAvatar)}
-            </div>
-          </div>
-
-          <div id="EyebrowsList">
-            <p>Eyebrows</p>
-            <div className='boxLarge'>
-              {getCharacterPart(total.eyebrows, `eyebrows`, `./character/eyebrows`, eyebrowsAvatar)}
-            </div>
-          </div>
-
-          <div id="glassesList">
-            <p>Glasses</p>
-            <div className='boxLarge'>
-              {getCharacterPart(total.glasses, `glasses`, `./character/accessories/glasses`, glassesAvatar)}
-            </div>
-          </div>
-          <div id="clothingLayer1List">
-            <p>Clothing Layer 1</p>
-            <div className='boxLarge'>
-              {getCharacterPart(total.clothingLayer1, `clothingLayer1`, `./character/clothes/layer_1`, clothingLayer1Avatar)}
-            </div>
-          </div>
-          <div id="clothingLayer2List">
-            <p>Clothing Layer 2</p>
-            <div className='boxLarge'>
-              {getCharacterPart(total.clothingLayer2, `clothingLayer2`, `./character/clothes/layer_2`, clothingLayer2Avatar)}
-            </div>
-          </div>
-          <div id="clothingLayer3List">
-            <p>Clothing Layer 3</p>
-            <div className='boxLarge'>
-              {getCharacterPart(total.clothingLayer3, `clothingLayer3`, `./character/clothes/layer_3`, clothingLayer3Avatar)}
-            </div>
-          </div>
-          <div id="earringsList">
-            <p>Earrings</p>
-            <div className='boxLarge'>
-              {getCharacterPart(total.earrings, `earrings`, `./character/accessories/earrings`, earringsAvatar)}
-            </div>
-          </div>
-          <div id="hatsList">
-            <p>Hats</p>
-            <div className='boxLarge'>
-              {getCharacterPart(total.hats, `hats`, `./character/accessories/hats`, hatsAvatar)}
-            </div>
-          </div>
-          <div id="neckwearList">
-            <p>neckwear</p>
-            <div className='boxLarge'>
-              {getCharacterPart(total.neckwear, `neckwear`, `./character/accessories/neckwear`, neckwearAvatar)}
-            </div>
-          </div>
-          <div id="facialHairList">
-            <p>Facial Hair</p>
-            <div className='boxLarge'>
-              {getCharacterPart(total.facial_hair, `facial_hair`, `./character/facial_hair`, facial_hairAvatar)}
-            </div>
-          </div>
+          <PartList totalPics={total.body} part={`body`} path={`./character/body`} state={bodyAvatar} getCharacterPart={getCharacterPart} />
+          <PartList totalPics={total.eyes} part={`eyes`} path={`./character/eyes`} state={eyesAvatar} getCharacterPart={getCharacterPart} />
+          <PartList totalPics={total.hair} part={`hair`} path={`./character/hair`} state={hairAvatar} getCharacterPart={getCharacterPart} />
+          <PartList totalPics={total.mouth} part={`mouth`} path={`./character/mouths`} state={mouthAvatar} getCharacterPart={getCharacterPart} />
+          <PartList totalPics={total.eyebrows} part={`eyebrows`} path={`./character/eyebrows`} state={eyebrowsAvatar} getCharacterPart={getCharacterPart} />
+          <PartList totalPics={total.glasses} part={`glasses`} path={`./character/accessories/glasses`} state={glassesAvatar} getCharacterPart={getCharacterPart} />
+          <PartList totalPics={total.clothingLayer1} part={`clothingLayer1`} path={`./character/clothes/layer_1`} state={clothingLayer1Avatar} getCharacterPart={getCharacterPart} />
+          <PartList totalPics={total.clothingLayer2} part={`clothingLayer2`} path={`./character/clothes/layer_2`} state={clothingLayer2Avatar} getCharacterPart={getCharacterPart} />
+          <PartList totalPics={total.clothingLayer3} part={`clothingLayer3`} path={`./character/clothes/layer_3`} state={clothingLayer3Avatar} getCharacterPart={getCharacterPart} />
+          <PartList totalPics={total.earrings} part={`earrings`} path={`./character/accessories/earrings`} state={earringsAvatar} getCharacterPart={getCharacterPart} />
+          <PartList totalPics={total.hats} part={`hats`} path={`./character/accessories/hats`} state={hatsAvatar} getCharacterPart={getCharacterPart} />
+          <PartList totalPics={total.neckwear} part={`neckwear`} path={`./character/accessories/neckwear`} state={neckwearAvatar} getCharacterPart={getCharacterPart} />
+          <PartList totalPics={total.facial_hair} part={`facial_hair`} path={`./character/facial_hair`} state={facial_hairAvatar} getCharacterPart={getCharacterPart} />
 
         </div>
       </main>
